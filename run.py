@@ -2,7 +2,7 @@ import random
 from time import sleep
 import numpy
 import cv2
-
+import os
 
 WIDTH : int = int(input("Enter width: "))
 HEIGHT : int = int(input("Enter height: "))
@@ -40,7 +40,7 @@ def saveAsImage(environment : list,gen : int) -> None:
                 numpyEnvironment[row,cell] = 127
             else:
                 numpyEnvironment[row,cell] = 255
-    cv2.imwrite(f"Gen{gen}.png",numpyEnvironment)
+    cv2.imwrite(f"./{WIDTH}x{HEIGHT}/Gen{gen}.png",numpyEnvironment)
 
 def applyRules(environment : list, environmentAge : list) -> list:
     newEnvironment : list = [environment[row][::] for row in range(HEIGHT)]
@@ -103,6 +103,12 @@ environmentAge = [[0 for _ in range(WIDTH)] for _ in range(HEIGHT)]
 generation : int = 0
 
 generationsToPrintAt : list = [0,10,100,500,1000]
+
+try:
+    os.mkdir(f"./{WIDTH}x{HEIGHT}")
+except Exception as e:
+    print(f"Couldn't create folder",e)
+
 while True:
     if generation in  generationsToPrintAt:
         print("Generation :", generation)
