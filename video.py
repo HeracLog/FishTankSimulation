@@ -11,7 +11,7 @@ frames = [img for img in os.listdir(frames_dir) if img.endswith(".png")]
 
 frames.sort(key = sortKey)
 
-fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+fourcc = cv2.VideoWriter_fourcc(*'h264')
 video = cv2.VideoWriter('100x100.mp4', fourcc, 60.0, (100, 100))
 
 for frame in frames:

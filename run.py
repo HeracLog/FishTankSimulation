@@ -15,12 +15,17 @@ SUFFOCATION_FACTOR = 8
 
 SHARK_DEATH_FACTOR : int = 5
 
+WATER_PROBABILITY = 0.5
+FISH_PROBABILITY = 0.30
+SHARK_PROBABILITY = 0.20
+
 types : dict = {0:'Space',1:'Fish',2:'Shark'}
 
+FOLDER_NAME = f"./{WIDTH}x{HEIGHT}-{FISH_PROBABILITY}x{SHARK_PROBABILITY}"
 def decideCell() -> int:
     probability = random.random()
-    if probability < 0.17: return 2
-    if probability < 0.5: return 1
+    if probability < SHARK_PROBABILITY: return 2
+    if probability < SHARK_PROBABILITY + FISH_PROBABILITY : return 1
     return 0
 
 def display(evironment : list[list[int]]) -> None:
@@ -40,7 +45,7 @@ def saveAsImage(environment : list,gen : int) -> None:
                 numpyEnvironment[row,cell] = 127
             else:
                 numpyEnvironment[row,cell] = 255
-    cv2.imwrite(f"./{WIDTH}x{HEIGHT}/Gen{gen}.png",numpyEnvironment)
+    cv2.imwrite(f"{FOLDER_NAME}/Gen{gen}.png",numpyEnvironment)
 
 def applyRules(environment : list, environmentAge : list) -> list:
     newEnvironment : list = [environment[row][::] for row in range(HEIGHT)]
@@ -105,7 +110,7 @@ generation : int = 0
 generationsToPrintAt : list = [0,10,100,500,1000]
 
 try:
-    os.mkdir(f"./{WIDTH}x{HEIGHT}")
+    os.mkdir(FOLDER_NAME)
 except Exception as e:
     print(f"Couldn't create folder",e)
 
@@ -114,7 +119,7 @@ while True:
         print("Generation :", generation)
         display(environment)
         saveAsImage(environment,generation)
-        if generation == 1000:
+        if generation == generationsToPrintAt[-1]:
             break
     environment = applyRules(environment,environmentAge)
     replaceByAge(environment,environmentAge)
